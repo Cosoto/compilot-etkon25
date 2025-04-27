@@ -1,0 +1,14 @@
+{
+  "builds": [
+    {
+      "src": "skill-matrix-app/package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "skill-matrix-app/$1"
+    }
+  ]
+} 

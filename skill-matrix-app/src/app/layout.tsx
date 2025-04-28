@@ -4,10 +4,11 @@ import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { UserProvider } from "@/contexts/UserContext";
 import Navigation from "@/components/layout/Navigation";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import RouteChangeIndicator from "@/components/layout/RouteChangeIndicator";
 import { LoadingOverlayProvider } from "@/contexts/LoadingOverlayContext";
 import LoadingOverlay from "@/components/layout/LoadingOverlay";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -34,6 +35,8 @@ export default function RootLayout({
             </UserProvider>
           </AuthProvider>
         </LoadingOverlayProvider>
+        <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );

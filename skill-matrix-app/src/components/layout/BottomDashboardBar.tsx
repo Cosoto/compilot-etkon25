@@ -20,6 +20,7 @@ import {
   BuildingOffice2Icon as BuildingOffice2IconSolid,
 } from '@heroicons/react/24/solid';
 import { useUser } from '@/hooks/useUser';
+import { useLoadingOverlay } from '@/contexts/LoadingOverlayContext';
 
 const navItems = [
   {
@@ -59,16 +60,23 @@ const BottomDashboardBar = () => {
   const router = useRouter();
   const { user, signOut } = useAuth();
   const { isAdmin } = useUser();
+  const { showLoading, hideLoading } = useLoadingOverlay();
   const [showLogout, setShowLogout] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [loggingOut, setLoggingOut] = useState(false);
 
   const handleLogout = async () => {
-    setLoggingOut(true);
-    await signOut();
     setShowLogout(false);
-    router.replace('/');
-    setLoggingOut(false);
+    showLoading('Signing out…');
+    try {
+      await signOut();
+      router.replace('/');
+    } catch (err) {
+      // Optionally, show a toast/snackbar here for error
+      console.error('Logout failed', err);
+    } finally {
+      hideLoading();
+    }
   };
 
   return (
@@ -123,7 +131,7 @@ const BottomDashboardBar = () => {
           className="flex items-center gap-2 px-2 py-1 rounded-full hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
           aria-label="User menu"
           aria-haspopup="true"
-          aria-expanded={Boolean(showLogout)}
+          aria-expanded={!!showLogout}
           tabIndex={0}
           onClick={() => setShowLogout((v) => !v)}
           onBlur={() => setTimeout(() => setShowLogout(false), 150)}

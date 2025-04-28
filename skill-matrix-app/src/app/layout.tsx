@@ -5,6 +5,9 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { UserProvider } from "@/contexts/UserContext";
 import Navigation from "@/components/layout/Navigation";
 import { SpeedInsights } from "@vercel/speed-insights/next"
+import RouteChangeIndicator from "@/components/layout/RouteChangeIndicator";
+import { LoadingOverlayProvider } from "@/contexts/LoadingOverlayContext";
+import LoadingOverlay from "@/components/layout/LoadingOverlay";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,12 +24,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} antialiased`}>
-        <AuthProvider>
-          <UserProvider>
-            <Navigation />
-            <main>{children}</main>
-          </UserProvider>
-        </AuthProvider>
+        <LoadingOverlayProvider>
+          <LoadingOverlay />
+          <RouteChangeIndicator />
+          <AuthProvider>
+            <UserProvider>
+              <Navigation />
+              <main>{children}</main>
+            </UserProvider>
+          </AuthProvider>
+        </LoadingOverlayProvider>
       </body>
     </html>
   );
